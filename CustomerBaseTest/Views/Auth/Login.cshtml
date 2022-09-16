@@ -1,0 +1,100 @@
+﻿
+@model CustomerBaseTest.ViewModels.UserForLoginVM;
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "AuthLayout";
+}
+<body class="hold-transition login-page">
+    <h4>Root User Name : <strong>root</strong></h4>
+    <h4>Root Password : <strong>pswrd1</strong></h4>
+
+    <div class="login-box">
+
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a asp-action="Login" asp-controller="Auth" class="h1"><b>Giriş Yap</b></a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">İşlem yapmak için oturum açınız</p>
+                @if (ViewBag.State == null)
+                {
+                    <form asp-action="Login" asp-controller="Auth" method="post">
+
+                        <div class="input-group mb-3">
+
+                            <input type="text" asp-for="Username" class="form-control" placeholder="Kullanıcı Adı">
+                            <br />
+
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-user"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Username"></span>
+                        <div class="input-group mb-3">
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Şifre">
+
+                            <br />
+
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Password"></span>
+
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="icheck-primary">
+                                    <input type="checkbox" id="remember">
+                                    <label for="remember">
+                                     "Beni Hatırla"
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                            <div class="col-4">
+                                <input type="submit" value="Giriş Yap" class="btn btn-primary btn-block">
+                            </div>
+                            <!-- /.col -->
+                        </div>
+
+
+                    </form>
+                }
+                else
+                {
+                    if (ViewBag.State)
+                    {
+                        <div class="alert-success">
+
+                            " Giriş Başarılı"
+                        </div>
+                    }
+                    else
+                    {
+                        @:
+                        <div class="alert-danger mt-2">Kullanıcı Adı veya Şifre Hatalı</div>
+                        <div class="text alert-info mt-4">5 yanlış girişte hesabın 1 dakika kitlenecek. Şifreni sıfırlamayı deneyebilirsin.</div>
+                        <div class=" m-2 ">
+                            <a href="/Auth/Login" type="submit" class="btn btn-primary">Tekrar Dene</a>
+
+                        </div>
+
+                    }
+                }
+                <p class="m-6 ">
+                    <a href="/Auth/ResetPassword">Şifremi Unuttum</a>
+                </p>
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.login-box -->
+</body>
