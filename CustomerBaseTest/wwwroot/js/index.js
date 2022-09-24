@@ -8,7 +8,7 @@ var dialogEl = document.getElementById('chatDialog');
 
 // Initialize the SignalR client
 var connection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:7001/chatHub")
+    .withUrl("http://localhost:7001/chatHub")
     .build();
 
 connection.on('ReceiveMessage', renderMessage);
@@ -26,19 +26,18 @@ function startConnection() {
             console.error(err);
         });
 }
+
 function onDisconnected() {
     dialogEl.classList.add('disconnected');
 }
 
-
 function onConnected() {
     dialogEl.classList.remove('disconnected');
-
 
     var messageTextboxEl = document.getElementById('messageTextbox');
     messageTextboxEl.focus();
 
-    connection.invoke('SetName', chatterName);
+    connection.invoke('SetName', chatterName, chatterDepartment, chatterMail);
 }
 
 
@@ -64,15 +63,18 @@ function ready() {
         e.target[0].value = '';
         sendMessage(text);
     });
-
+    // This section, first screen for customer. 
     var welcomePanelEl = document.getElementById('chatWelcomePanel');
     welcomePanelEl.addEventListener('submit', function (e) {
         e.preventDefault();
-
         var name = e.target[0].value;
+        var department = e.target[1].value;
+        var mail = e.target[2].value;
         if (name && name.length) {
             welcomePanelEl.style.display = 'none';
             chatterName = name;
+            chatterDepartment = department;
+            chatterMail = mail;
             startConnection();
         }
     });
