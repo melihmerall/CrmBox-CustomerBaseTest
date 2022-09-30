@@ -6,6 +6,31 @@ var chatterName = 'Visitor';
 //
 var dialogEl = document.getElementById('chatDialog');
 
+var customerConnection = new signalR.HubConnectionBuilder()
+    .withUrl('http://localhost:7001/onlineCustomerHub')
+    .build();
+    
+
+customerConnection.on('GetCustomerCounter', function (customerCounter) {
+    document.getElementById("customerOnline").innerHTML = customerCounter;
+});
+
+customerConnection.onclose(function () { 
+    handleDisconnected(startCustomerConnection);
+});
+
+function startCustomerConnection() {
+    customerConnection
+        .start()
+        .catch(function (err) {
+            console.error(err);
+        });
+}
+
+
+
+
+
 // Initialize the SignalR client
 var connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:7001/chatHub")
@@ -54,7 +79,7 @@ function sendMessage(text) {
 
 function ready() {
     setTimeout(showChatDialog, 750);
-
+    startCustomerConnection();
     var chatFormEl = document.getElementById('chatForm');
     chatFormEl.addEventListener('submit', function (e) {
         e.preventDefault();
